@@ -1,8 +1,8 @@
 """
 Hangman.
 
-Authors: Jack Franey and Jake Lauteri and Josiah .
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: Jack Franey and Jake Lauteri and Josiah Hasegawa.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # TODO: 2. Implement Hangman using your Iterative Enhancement Plan.
 
@@ -62,7 +62,7 @@ def spaces(secret_word):
     return list
 
 def change_word(some_list, secret_word, w):
-    
+
 
 
 
