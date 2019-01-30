@@ -105,7 +105,7 @@ def change_word(progress):
 
 def end_of_game(progress,result,right,chances):
     message = ''
-    if win(progress,right) == True: #problem might be with win function
+    if win(progress,right) == True: #problem might be with win function?
         message = 'Winner'
     if chances == 0:
         message = 'Loser'
