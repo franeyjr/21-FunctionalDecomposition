@@ -56,8 +56,10 @@ def game_loop(secret_word):
         spaces = spaces + ['_']
 
     letter = guess()
-    letter, k = check_guess(secret_word,letter,chances)
-    spaces, letter = change_word(secret_word,letter,spaces)
+    letter, k, result = check_guess(secret_word,letter,chances)
+    spaces, letter = stuff_right(secret_word,letter,spaces)
+    change_word(spaces)
+    end_of_game(spaces, result, secret_word, chances)
 
 def guess():
 
@@ -65,14 +67,16 @@ def guess():
     return letter
 
 def check_guess(secret_word,letter,chances):
+    result = 'Correct'
     for k in range(len(secret_word)):
         if secret_word[k] == letter:
-            return letter, k
+            return letter, k, result
         else:
             chances = chances - 1
-            return chances, None
+            result = 'Wrong'
+            return chances, None, result
 
-def change_word(secret_word,letter,spaces):
+def stuff_right(secret_word,letter,spaces):
     right = []
     for k in range(len(secret_word)):
         if secret_word[k] == letter:
@@ -87,10 +91,24 @@ def change_word(secret_word,letter,spaces):
     # print(secret_word)
     # return secret_word
 
+def change_word(spaces):
+    blanks = ''
+    for k in range(len(spaces)):
+        blanks = blanks + spaces[k] + ' '
+    print(spaces)
+
+def end_of_game(spaces,result,secret_word,chances):
+    if win(spaces,secret_word) == True:
 
 
-
-
+def win(spaces,secret_word):
+    number_right = 0
+    for k in range(len(secret_word)):
+        if spaces[k] == secret_word[k]:
+            number_right = number_right +1
+    if number_right == len(secret_word):
+        return True
+    else: return False
 
 
 
