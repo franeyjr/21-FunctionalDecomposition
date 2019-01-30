@@ -54,15 +54,20 @@ def game_loop(secret_word):
     spaces = []
     for _ in range(len(secret_word)):
         spaces = spaces + ['_']
-
-    letter = guess()
-    letter, k, result = check_guess(secret_word,letter,chances)
-    spaces, letter = stuff_right(secret_word,letter,spaces)
-    change_word(spaces)
-    end_of_game(spaces, result, secret_word, chances)
+    while True:
+        letter = guess()
+        letter, result, k = check_guess(secret_word,letter,chances)
+        progress, right = stuff_right(secret_word,letter,spaces)
+        change_word(progress)
+        message = end_of_game(progress, result, right, chances)
+        print(message)
+        if message == 'Winner':
+            break
+        elif message == 'Loser':
+            print('The word was:', secret_word)
+            break
 
 def guess():
-
     letter = str(input('Enter a letter: '))
     return letter
 
@@ -70,18 +75,19 @@ def check_guess(secret_word,letter,chances):
     result = 'Correct'
     for k in range(len(secret_word)):
         if secret_word[k] == letter:
-            return letter, k, result
+            print('Wrong guesses left: ', chances)
+            return letter, result, k
         else:
             chances = chances - 1
             result = 'Wrong'
-            return chances, None, result
+            print(result, 'Wrong guesses left: ', chances)
+            return chances, result, None
 
 def stuff_right(secret_word,letter,spaces):
     right = []
     for k in range(len(secret_word)):
-        if secret_word[k] == letter:
-            right = right + [secret_word[k]]
-    for j in range(len(right)):
+        right = right + [secret_word[k]]
+    for j in range(len(secret_word)):
         if letter == right[j]:
             spaces[j] = letter
     return spaces, letter
@@ -91,22 +97,26 @@ def stuff_right(secret_word,letter,spaces):
     # print(secret_word)
     # return secret_word
 
-def change_word(spaces):
+def change_word(progress):
     blanks = ''
-    for k in range(len(spaces)):
-        blanks = blanks + spaces[k] + ' '
-    print(spaces)
+    for k in range(len(progress)):
+        blanks = blanks + progress[k] + ' '
+    print(progress)
 
-def end_of_game(spaces,result,secret_word,chances):
-    if win(spaces,secret_word) == True:
+def end_of_game(progress,result,right,chances):
+    message = ''
+    if win(progress,right) == True: #problem might be with win function
+        message = 'Winner'
+    if chances == 0:
+        message = 'Loser'
+    return message
 
-
-def win(spaces,secret_word):
+def win(progress,right):
     number_right = 0
-    for k in range(len(secret_word)):
-        if spaces[k] == secret_word[k]:
+    for k in range(len(progress)):
+        if progress[k] == right[k]:
             number_right = number_right +1
-    if number_right == len(secret_word):
+    if number_right == len(right):
         return True
     else: return False
 
