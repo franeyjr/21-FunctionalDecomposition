@@ -50,21 +50,21 @@ def get_min_length():
     return min_length
 
 def game_loop(secret_word):
-    chances = 5
+    wrong = 0
     spaces = []
     for _ in range(len(secret_word)):
         spaces = spaces + ['_']
     while True:
         letter = guess()
-        letter, result, k = check_guess(secret_word,letter,chances)
+        letter, result, k = check_guess(secret_word,letter,wrong)
         progress, right = stuff_right(secret_word,letter,spaces)
         change_word(progress)
-        message = end_of_game(progress, result, right, chances)
+        message, wrong = end_of_game(progress, right, result, wrong)
         print(message)
-        if message == 'Winner':
-            break
-        elif message == 'Loser':
+        if message == 'Loser':
             print('The word was:', secret_word)
+            break
+        elif message == 'Winner':
             break
 
 def guess():
@@ -90,35 +90,48 @@ def stuff_right(secret_word,letter,spaces):
     for j in range(len(secret_word)):
         if letter == right[j]:
             spaces[j] = letter
-    return spaces, letter
+    return spaces, right
 
     # for k in range(len(some_list)):
     #     secret_word[some_list[k]] = (w)
     # print(secret_word)
     # return secret_word
 
-def change_word(progress):
+def change_word(spaces):
     blanks = ''
-    for k in range(len(progress)):
-        blanks = blanks + progress[k] + ' '
-    print(progress)
+    for k in range(len(spaces)):
+        blanks = blanks + spaces[k] + ' '
+    print(blanks)
 
-def end_of_game(progress,result,right,chances):
+def end_of_game(progress,right,result,wrong):
     message = ''
     if win(progress,right) == True: #problem might be with win function?
         message = 'Winner'
-    if chances == 0:
+    if result == 'Wrong':
+        wrong = wrong + 1
+    if wrong == 5:
         message = 'Loser'
     return message
 
-def win(progress,right):
-    number_right = 0
-    for k in range(len(progress)):
-        if progress[k] == right[k]:
-            number_right = number_right +1
-    if number_right == len(right):
+# def win(spaces,right):
+#     number_right = 0
+#     for k in range(len(spaces)):
+#         if spaces[k] == right[k]:
+#             number_right = number_right +1
+#     if number_right == len(right):
+#         return True
+#     else:
+#         return False
+
+def win(spaces, right):
+    count = 0
+    for k in range(len(spaces)):
+        if spaces[k] == right[k]:
+            count = count + 1
+    if count == len(right):
         return True
-    else: return False
+    else:
+        return False
 
 
 
